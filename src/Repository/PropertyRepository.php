@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Property;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -22,17 +23,15 @@ class PropertyRepository extends ServiceEntityRepository
     /**
      * Undocumented function
      *
-     * @return Property[]
+     * @return Query
      */
-   
 
-    public function findAllVisible():array
+
+    public function findAllVisibleQuery(): Query
     {
-        return $this->findVisibleQuery('p')
-            
-            ->getQuery()
-            ->getResult()
-        ;
+        return $this->findVisibleQuery()
+            ->getQuery();
+
     }
      /**
      * Undocumented function
@@ -41,14 +40,35 @@ class PropertyRepository extends ServiceEntityRepository
      */
    
 
-    public function findLatest():array
+    public function findLatest($num):array
     {
         return $this->findVisibleQuery('p')
             ->Where('p.sold = false')
-            ->setMaxResults(4)
+            ->setMaxResults($num)
+            ->orderBy('p.created_at', 'DESC')
             ->getQuery()
             ->getResult()
         ;
+    }
+    public function findLatestventes($num):array
+    {
+        return $this->findVisibleQuery('p')
+            ->Where('p.sold = false','p.location = false')
+            ->setMaxResults($num)
+            ->orderBy('p.created_at', 'DESC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+    public function findLatestlocation($num):array
+    {
+        return $this->findVisibleQuery('p')
+            ->Where('p.sold = false','p.location = true')
+            ->setMaxResults($num)
+            ->orderBy('p.created_at', 'DESC')
+            ->getQuery()
+            ->getResult()
+            ;
     }
     private function findVisibleQuery():QueryBuilder
     {

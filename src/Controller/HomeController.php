@@ -14,10 +14,12 @@ class HomeController extends AbstractController
      */
     public function index(PropertyRepository $repository): Response
     {
-        $property=$repository->findlatest();
+        $ventes=$repository->findLatestventes(6);
+        $locations=$repository->findlatestlocation(6);
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',
-            'properties'=> $property,
+            'ventes'=> $ventes,
+            'locations' =>$locations
         ]);
     }
 }

@@ -4,7 +4,11 @@ namespace App\Entity;
 
 use App\Repository\PropertyRepository;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 
 /**
@@ -15,8 +19,9 @@ class Property
     const HEAT=[
         0 => 'centrale',
         2 => 'gaz'
-    ]; 
-    
+    ];
+    const TYPE=["Appartement","Villa","Maison", "Ferme"];
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -36,6 +41,7 @@ class Property
 
     /**
      * @ORM\Column(type="float")
+     * @Assert\Range(min=10,max=700)
      */
     private $surface;
 
@@ -76,6 +82,7 @@ class Property
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Regex("/^([0-9]){4}$/")
      */
     private $postal_code;
 
@@ -94,9 +101,22 @@ class Property
      */
     private $location;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     *
+     */
+    private $type;
+
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $path;
+
     public function __construct()
     {
         $this->created_at = new DateTime();
+
         
     }
 
@@ -271,6 +291,31 @@ class Property
     public function setLocation(bool $location): self
     {
         $this->location = $location;
+
+        return $this;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+
+    public function getPath(): ?string
+    {
+        return $this->path;
+    }
+
+    public function setPath(string $path): self
+    {
+        $this->path = $path;
 
         return $this;
     }

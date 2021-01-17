@@ -3,25 +3,34 @@
 {% block title %}Properties{% endblock %}
 
 {% block body %}
-<div class="jumbotron">
-<div class="container mt-4" >
+
+
+<div class="container">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{{ path('property.index') }}">Home</a>
+        </li>
+        <li class="breadcrumb-item active">About</li>
+    </ol>
+
+    <!-- Intro Content -->
     <div class="row">
-        <div class="col-md-8">
-        
+        <div class="col-lg-6">
+            <img class="img-fluid rounded mb-4" src="{{ asset(property.path) }}" alt="{{ property.title }}">
         </div>
-        <div class="col-md-4">
+        <div class="col-lg-6">
             <h1>{{ property.title }}</h1>
             <h2>{{ property.rooms }} pièces - {{ property.surface }} m² </h2>
             <div class="text-primary" style="font-size:4rem; font-weight:bold;">{{property.price}} dt</div>
-            
-            <a href="#" class="btn btn-primary">Contactez l'agence</a>
+
+            <a href="{{path('contact')}}" class="btn btn-primary">Contactez l'agence</a>
+            <p>{{property.description | nl2br}}</p>
         </div>
     </div>
+    <!-- /.row -->
 
-</div>
 
-<p>{{property.description | nl2br}}</p>
-</div>
+
 
 <div class="row">
 
@@ -53,13 +62,36 @@
             <td>Chauffage</td>
             <td>{{property.heat}}</td>
             </tr>
-        </tbody>
+
         </table>
         </div>
-        <div class="col-md-4">
-        <h2>Spécificités</h2>
-        </div>
+
 </div>
+    <h2>Les biens phares</h2>
+
+    <div class="row">
+        {% for property in latest%}
+        <div class="col-lg-4 mb-4">
+            <div class="card h-100 text-center">
+                <img class="card-img-top" src="{{ asset(property.path) }}" alt="{{ property.title }}">
+                <div class="card-body">
+                    <a href="{{ path('property.show', {id : property.id}) }}" class="card-title">{{ property.title }}</a>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ property.price | number_format(0,'',' ')}} dt</h6>
+                    <p class="card-text">{{ property.description }}</p>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ path('property.show', {id : property.id}) }}" class="btn btn-primary">Détails</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    </div>
+
+
+    <!-- /.row -->
+
+
 
 
 {% endblock %}
